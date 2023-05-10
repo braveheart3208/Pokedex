@@ -2,6 +2,7 @@ package com.appsolute.pokedex.application
 
 import android.app.Application
 import dagger.hilt.android.HiltAndroidApp
+import timber.log.Timber
 
 /**
  * Created by Toan (Alex) Duong.
@@ -14,5 +15,7 @@ class PokedexApplication : Application() {
 
     override fun onCreate() {
         super.onCreate()
+        //Timber
+        Timber.plant(Timber.DebugTree())
     }
 }
