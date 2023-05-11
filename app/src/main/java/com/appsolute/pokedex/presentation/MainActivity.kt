@@ -9,12 +9,16 @@ import androidx.compose.material3.Surface
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import com.appsolute.pokedex.presentation.component.pokemonlist.PokemonListScreen
+import com.appsolute.pokedex.presentation.state.PokemonListState
 import com.appsolute.pokedex.presentation.ui.theme.PokedexTheme
+import com.appsolute.pokedex.presentation.viewmodel.PokemonListViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -34,7 +38,11 @@ class MainActivity : ComponentActivity() {
                         startDestination = Screen.PokeListScreen.route
                     ) {
                         composable(route = Screen.PokeListScreen.route) {
-
+                            val viewModel = hiltViewModel<PokemonListViewModel>()
+                            PokemonListScreen(
+                                state = viewModel.state.value,
+                                navController = navController
+                            )
                         }
                         composable(
                             route = Screen.PokeDetailScreen.route + "/{dominantColor}/{pokemonName}",
