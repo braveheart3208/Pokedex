@@ -49,3 +49,29 @@ fun Modifier.bounceClick() = composed {
             }
         }
 }
+
+fun Modifier.pressClickEffect() = composed {
+    var buttonState by remember { mutableStateOf(ButtonState.Idle) }
+    val ty by animateFloatAsState(if (buttonState == ButtonState.Pressed) 0f else -20f)
+
+    this
+        .graphicsLayer {
+            translationY = ty
+        }
+        .clickable(
+            interactionSource = remember { MutableInteractionSource() },
+            indication = null,
+            onClick = {  }
+        )
+        .pointerInput(buttonState) {
+            awaitPointerEventScope {
+                buttonState = if (buttonState == ButtonState.Pressed) {
+                    waitForUpOrCancellation()
+                    ButtonState.Idle
+                } else {
+                    awaitFirstDown(false)
+                    ButtonState.Pressed
+                }
+            }
+        }
+}

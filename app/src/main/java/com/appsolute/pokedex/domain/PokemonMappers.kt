@@ -1,7 +1,10 @@
 package com.appsolute.pokedex.domain
 
 import com.appsolute.pokedex.application.extension.toUpperCaseFirstLetter
+import com.appsolute.pokedex.data.remote.dto.PokemonDetailDTO
 import com.appsolute.pokedex.data.remote.dto.PokemonSummaryDTO
+import com.appsolute.pokedex.domain.model.PokemonDetail
+import com.appsolute.pokedex.domain.model.PokemonStat
 import com.appsolute.pokedex.domain.model.PokemonSummary
 
 /**
@@ -24,5 +27,25 @@ fun PokemonSummaryDTO.toPokemonSummary(): PokemonSummary {
     return PokemonSummary(
         name = this.name.toUpperCaseFirstLetter(),
         imageUrl = "https://unpkg.com/pokeapi-sprites@2.0.4/sprites/pokemon/other/dream-world/$pokemonIndex.svg"
+    )
+}
+
+fun PokemonDetailDTO.toPokemonDetail(): PokemonDetail {
+    return PokemonDetail(
+        id = this.id,
+        name = this.name,
+        height = this.height,
+        weight = this.weight,
+        frontImageUrl = this.sprites.front_default,
+        backImageUrl = this.sprites.back_default,
+        stats = this.stats.map {
+            PokemonStat(
+                name = it.stat.name,
+                base = it.base_stat
+            )
+        },
+        types = this.types.map {
+            it.type.name
+        }
     )
 }

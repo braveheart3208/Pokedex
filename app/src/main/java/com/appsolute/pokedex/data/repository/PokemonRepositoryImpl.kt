@@ -4,6 +4,7 @@ import com.appsolute.pokedex.data.remote.api.PokemonApi
 import com.appsolute.pokedex.domain.model.PokemonDetail
 import com.appsolute.pokedex.domain.model.PokemonSummary
 import com.appsolute.pokedex.domain.repository.PokemonRepository
+import com.appsolute.pokedex.domain.toPokemonDetail
 import com.appsolute.pokedex.domain.toPokemonSummary
 import dagger.hilt.android.scopes.ActivityScoped
 import javax.inject.Inject
@@ -18,7 +19,7 @@ import javax.inject.Inject
 class PokemonRepositoryImpl @Inject constructor(
     private val pokemonApi: PokemonApi
 ) : PokemonRepository {
-    override suspend fun getAllPokemons(limit: Int, offset: Int): List<PokemonSummary> {
+    override suspend fun getPokemons(limit: Int, offset: Int): List<PokemonSummary> {
         return pokemonApi.getPokemonList(limit, offset)
             ?.results
             ?.map {
@@ -28,6 +29,6 @@ class PokemonRepositoryImpl @Inject constructor(
     }
 
     override suspend fun getPokemonDetails(pokemonName: String): PokemonDetail? {
-        return null
+        return pokemonApi.getPokemonDetail(pokemonName)?.toPokemonDetail()
     }
 }

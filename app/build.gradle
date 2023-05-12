@@ -96,4 +96,8 @@ dependencies {
     implementation "com.squareup.okhttp3:logging-interceptor:5.0.0-alpha.3"
     //Support palette
     implementation 'androidx.palette:palette-ktx:1.0.0'
+    //Pagination
+    def paging_version = "3.1.1"
+    implementation "androidx.paging:paging-runtime:$paging_version"
+    implementation "androidx.paging:paging-compose:1.0.0-alpha19"
 }

@@ -6,6 +6,7 @@ import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -15,8 +16,9 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import androidx.paging.compose.collectAsLazyPagingItems
 import com.appsolute.pokedex.presentation.component.pokemonlist.PokemonListScreen
-import com.appsolute.pokedex.presentation.state.PokemonListState
+import com.appsolute.pokedex.presentation.event.UiEvent
 import com.appsolute.pokedex.presentation.ui.theme.PokedexTheme
 import com.appsolute.pokedex.presentation.viewmodel.PokemonListViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -39,13 +41,31 @@ class MainActivity : ComponentActivity() {
                     ) {
                         composable(route = Screen.PokeListScreen.route) {
                             val viewModel = hiltViewModel<PokemonListViewModel>()
+
+                            LaunchedEffect(key1 = Unit) {
+                                viewModel.uiEvent.collect { uiEvent ->
+                                    when (uiEvent) {
+                                        is UiEvent.Navigate -> {
+                                            navController.navigate(uiEvent.route)
+                                        }
+
+                                        else -> {}
+                                    }
+                                }
+                            }
+
+                            val pagingItems =
+                                viewModel.pagingPokemonItemFlow.collectAsLazyPagingItems()
+
+                            pagingItems.itemSnapshotList.items
                             PokemonListScreen(
+                                lazyPagingItems = pagingItems,
                                 state = viewModel.state.value,
-                                navController = navController
+                                onEventCalled = viewModel::onEventCalled,
                             )
                         }
                         composable(
-                            route = Screen.PokeDetailScreen.route + "/{dominantColor}/{pokemonName}",
+                            route = Screen.PokeDetailScreen.route + "/{pokemonName}",
                             arguments = listOf(
                                 navArgument("dominantColor") {
                                     type = NavType.IntType

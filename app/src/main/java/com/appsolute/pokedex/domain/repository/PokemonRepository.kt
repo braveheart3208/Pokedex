@@ -11,7 +11,7 @@ import com.appsolute.pokedex.domain.model.PokemonSummary
  */
 
 interface PokemonRepository {
-    suspend fun getAllPokemons(limit: Int, offset: Int): List<PokemonSummary>
+    suspend fun getPokemons(limit: Int, offset: Int): List<PokemonSummary>
 
     suspend fun getPokemonDetails(pokemonName: String): PokemonDetail?
 }

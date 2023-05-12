@@ -29,11 +29,13 @@ class GetPokemonsUsecase @Inject constructor(
         flow {
             emit(Resource.OnLoading())
             try {
-                val pokemonList = pokemonRepository.getAllPokemons(params.limit, params.offset)
+                val pokemonList = pokemonRepository.getPokemons(params.limit, params.offset)
 
                 emit(Resource.OnSuccess(pokemonList))
             } catch (exception: Exception) {
                 emit(Resource.OnError(message = UiText.DynamicString(value = exception.message!!)))
             }
         }
+
+
 }
