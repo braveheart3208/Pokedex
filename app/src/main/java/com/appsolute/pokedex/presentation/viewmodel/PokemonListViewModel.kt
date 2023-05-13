@@ -55,7 +55,7 @@ class PokemonListViewModel @Inject constructor(
             is PokemonListEvent.OnPokemonSelected -> {
                 val selectedPokemon = event.pokemon
                 viewModelScope.launch {
-                    _uiEventChannel.send(UiEvent.Navigate(Screen.PokeDetailScreen.route + "/${selectedPokemon.name}"))
+                    _uiEventChannel.send(UiEvent.NavigateForwardTo(Screen.PokeDetailScreen.route + "/${selectedPokemon.name}"))
                 }
             }
 

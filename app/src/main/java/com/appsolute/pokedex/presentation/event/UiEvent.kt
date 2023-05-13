@@ -12,5 +12,6 @@ import com.appsolute.pokedex.application.core.UiText
 sealed interface UiEvent {
     data class ShowError(val error: UiText) : UiEvent
     object ShowLoading : UiEvent
-    data class Navigate(val route : String) : UiEvent
+    data class NavigateForwardTo(val route : String) : UiEvent
+    object NavigateBack : UiEvent
 }

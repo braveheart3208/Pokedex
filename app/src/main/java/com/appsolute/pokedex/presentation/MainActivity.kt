@@ -7,19 +7,17 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import androidx.navigation.navArgument
 import androidx.paging.compose.collectAsLazyPagingItems
+import com.appsolute.pokedex.presentation.component.pokemondetail.PokemonDetailScreen
 import com.appsolute.pokedex.presentation.component.pokemonlist.PokemonListScreen
 import com.appsolute.pokedex.presentation.event.UiEvent
 import com.appsolute.pokedex.presentation.ui.theme.PokedexTheme
+import com.appsolute.pokedex.presentation.viewmodel.PokemonDetailViewModel
 import com.appsolute.pokedex.presentation.viewmodel.PokemonListViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -45,7 +43,7 @@ class MainActivity : ComponentActivity() {
                             LaunchedEffect(key1 = Unit) {
                                 viewModel.uiEvent.collect { uiEvent ->
                                     when (uiEvent) {
-                                        is UiEvent.Navigate -> {
+                                        is UiEvent.NavigateForwardTo -> {
                                             navController.navigate(uiEvent.route)
                                         }
 
@@ -65,25 +63,26 @@ class MainActivity : ComponentActivity() {
                             )
                         }
                         composable(
-                            route = Screen.PokeDetailScreen.route + "/{pokemonName}",
-                            arguments = listOf(
-                                navArgument("dominantColor") {
-                                    type = NavType.IntType
-                                },
-                                navArgument("pokemonName") {
-                                    type = NavType.StringType
-                                },
-                            )
+                            route = Screen.PokeDetailScreen.route + "/{pokemonName}"
                         ) {
-                            val dominantColor = remember {
-                                val color = it.arguments?.getInt("dominantColor")
-                                color?.let { Color(it) } ?: Color.White
+                            val viewModel = hiltViewModel<PokemonDetailViewModel>()
+
+                            LaunchedEffect(key1 = Unit) {
+                                viewModel.uiEvent.collect { uiEvent ->
+                                    when (uiEvent) {
+                                        is UiEvent.NavigateBack -> {
+                                            navController.navigateUp()
+                                        }
+
+                                        else -> {}
+                                    }
+                                }
                             }
 
-                            val pokemonName = remember {
-                                val name = it.arguments?.getInt("pokemonName")
-                                name ?: "Unknown"
-                            }
+                            PokemonDetailScreen(
+                                pokemonDetailState = viewModel.state.value,
+                                onEventCalled = viewModel::onEventCalled
+                            )
                         }
                     }
                 }
