@@ -8,6 +8,12 @@ package com.appsolute.pokedex.domain.model
  */
 
 data class PokemonDetail(
-    val name : String,
-
+    val id: Int,
+    val name: String,
+    val height: Int,
+    val weight: Int,
+    val frontImageUrl: String,
+    val backImageUrl: String,
+    val stats: List<PokemonStat>,
+    val types: List<String>,
 )
