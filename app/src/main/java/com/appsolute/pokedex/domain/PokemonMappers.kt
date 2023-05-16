@@ -41,7 +41,8 @@ fun PokemonDetailDTO.toPokemonDetail(): PokemonDetail {
         stats = this.stats.map {
             PokemonStat(
                 name = it.stat.name,
-                base = it.base_stat
+                base = it.base_stat,
+                stat = it.effort
             )
         },
         types = this.types.map {

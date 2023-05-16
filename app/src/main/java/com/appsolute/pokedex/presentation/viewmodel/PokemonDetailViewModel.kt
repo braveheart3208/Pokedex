@@ -40,15 +40,13 @@ class PokemonDetailViewModel @Inject constructor(
     init {
         savedStateHandle.get<String>("pokemonName")?.let { pokemonName ->
             getPokemonByName(pokemonName.toLowerCase(Locale("en")))
-        }
+        } ?: backToPreviousScreen()
     }
 
     fun onEventCalled(event: PokemonDetailEvent) {
         when (event) {
             is PokemonDetailEvent.onBackClicked -> {
-                viewModelScope.launch {
-                    _uiEventChannel.send(UiEvent.NavigateBack)
-                }
+                backToPreviousScreen()
             }
         }
     }
@@ -73,6 +71,12 @@ class PokemonDetailViewModel @Inject constructor(
                         }
                     }
                 }
+        }
+    }
+
+    private fun backToPreviousScreen() {
+        viewModelScope.launch {
+            _uiEventChannel.send(UiEvent.NavigateBack)
         }
     }
 }

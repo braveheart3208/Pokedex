@@ -9,5 +9,6 @@ package com.appsolute.pokedex.domain.model
 
 data class PokemonStat(
     val name: String,
-    val base: Int
+    val base: Int,
+    val stat : Int,
 )
