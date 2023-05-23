@@ -41,13 +41,10 @@ fun PokemonDetailContent(
     pokemonDetail: PokemonDetail,
     modifier: Modifier = Modifier
 ) {
-    val scrollState = rememberScrollState()
-
     Column(
         modifier = modifier
             .fillMaxSize()
-            .offset(y = 190.dp)
-            .verticalScroll(scrollState),
+            .offset(y = 190.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         //Pokemon Name
